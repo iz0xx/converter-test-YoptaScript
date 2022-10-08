@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+	<title>Document</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+	<div class="wrapper">
+		<div class="row">
+			<div class="column">
+				<select name="currency" data-select-1>
+					<option value="none" data-none>---</option>
+					<option value="USD" data-USD>USD</option>
+					<option value="EUR" data-EUR>EUR</option>
+					<option value="RUB" data-RUB>RUB</option>
+					<option value="BYN" data-BYN>BYN</option>
+					<option value="JOD" data-JOD>JOD</option>
+					<option value="KZT" data-KZT>KZT</option>
+					<option value="TRY" data-TRY>TRY</option>
+				</select>
+				<input type="text" placeholder="введите количество валюты" data-input-1>
+				<div class="info" data-info-1><span>Что за валюта?</span></div>
+			</div>
+			<div class="column">
+				<select name="currency" data-select-2>
+					<option value="none" data-none>---</option>
+					<option value="USD" data-USD>USD</option>
+					<option value="EUR" data-EUR>EUR</option>
+					<option value="RUB" data-RUB>RUB</option>
+					<option value="BYN" data-BYN>BYN</option>
+					<option value="JOD" data-JOD>JOD</option>
+					<option value="KZT" data-KZT>KZT</option>
+					<option value="TRY" data-TRY>TRY</option>
+				</select>
+				<input type="text" placeholder="введите количество валюты" data-input-2>
+				<div class="info" data-info-2><span>Что за валюта?</span></div>
+			</div>
+		</div>
+		<div class="status hidden">Загружаем данные с сервера, подождите...</div>
+	</div>
+
+	<script language="YoptaScript">
+		'use strict';
+		ксива.добавитьВертухай('DOMContentLoaded', () внатурепизже жЫ	
+		ясенХуй firstInput внатуре ксива.хулиВыёбываешься('[data-input-1]'),
+					secondInput внатуре ксива.хулиВыёбываешься('[data-input-2]'),
+					firstSelect внатуре ксива.хулиВыёбываешься('[data-select-1]'),
+					secondSelect внатуре ксива.хулиВыёбываешься('[data-select-2]'),
+					selectFirstOptions внатуре firstSelect.хулиТутВсеВыёбываются('option'),
+					selectSecondOptions внатуре secondSelect.хулиТутВсеВыёбываются('option'),
+					loading внатуре ксива.хулиВыёбываешься('.status'),
+					firstInfo внатуре ксива.хулиВыёбываешься('[data-info-1]'),
+					secondInfo внатуре ксива.хулиВыёбываешься('[data-info-2]'),
+					currNames внатуре жЫ
+						'USD': 'Доллар США',
+						'EUR': 'Евро',
+						'RUB': 'Российский рубль',
+						'BYN': 'Белорусский рубль',
+						'JOD': 'Иорданский динар',
+						'KZT': 'Казахский тенге',
+						'TRY': 'Турецкая лира'
+					есть нахуй
+
+			участковый firstValue, secondValue, exRateOfFirstValue, exRateOfSecondValue нахуй
+
+			// выбираем валюту йопта
+
+			firstSelect.добавитьВертухай('change', () => жЫ
+				вилкойвглаз (firstValue чоблявнатуре 'none') жЫ
+					selectSecondOptions.пероПодРебро(item внатурепизже жЫ
+						вилкойвглаз (item.attributes[`[data-$жЫfirstValueесть]`]) жЫ
+							item.removeAttribute('disabled') нахуй
+						есть
+					есть) нахуй
+				есть
+				firstValue = firstSelect.валио нахуй
+				
+				// получаем курс нахуй
+
+				вилкойвглаз (firstValue чоблявнатуре 'none') жЫ
+					loading.classList.toggle('hidden') нахуй
+					fetch(`https://v6.exchangerate-api.com/v6/3b75513717b258598da70aca/latest/${firstValue}`)
+					.атоэто(response внатурепизже response.json())
+					.атоэто(response внатурепизже жЫ
+						loading.classList.toggle('hidden') нахуй
+						exRateOfFirstValue внатуре response нахуй
+					есть)
+					.атоэто(() внатурепизже жЫ
+						// обновляем поле сука
+						вилкойвглаз (firstInput.валио чоблявнатуре '' ичо secondInput.валио чоблявнатуре '') жЫ
+							secondInput.валио внатуре calculateRate(firstInput.валио, secondValue, exRateOfFirstValue) нахуй
+						есть
+					есть) нахуй
+				есть
+
+				// выключаем выбранное нахуй
+
+				вилкойвглаз (firstValue чоблявнатуре 'none') жЫ
+					selectSecondOptions.пероПодРебро(item внатурепизже жЫ
+						вилкойвглаз (item.attributes[`data-$жЫfirstValueесть`]) жЫ
+							item.setAttribute('disabled', '') нахуй
+						есть
+					есть) нахуй
+				есть
+				
+			есть) нахуй
+			
+			secondSelect.добавитьВертухай('change', () => жЫ
+				вилкойвглаз (secondValue чоблявнатуре 'none') жЫ
+					selectFirstOptions.пероПодРебро(item внатурепизже жЫ
+						вилкойвглаз (item.attributes[`[data-$жЫsecondValueесть]`]) жЫ
+							item.removeAttribute('disabled') нахуй
+						есть
+					есть) нахуй
+				есть
+				secondValue = secondSelect.валио нахуй
+				
+				// получаем курс нахуй
+
+				вилкойвглаз (secondValue чоблявнатуре 'none') жЫ
+					loading.classList.toggle('hidden') нахуй
+					fetch(`https://v6.exchangerate-api.com/v6/3b75513717b258598da70aca/latest/${secondValue}`)
+					.атоэто(response внатурепизже response.json())
+					.атоэто(response внатурепизже жЫ
+						loading.classList.toggle('hidden') нахуй
+						exRateOfSecondValue внатуре response нахуй
+					есть)
+					.атоэто(() внатурепизже жЫ
+						// обновляем поле сука
+						вилкойвглаз (firstInput.валио чоблявнатуре '' ичо secondInput.валио чоблявнатуре '') жЫ
+							firstInput.валио внатуре calculateRate(secondInput.валио, firstValue, exRateOfSecondValue) нахуй
+						есть
+					есть) нахуй
+				есть
+
+				// выключаем выбранное нахуй
+
+				вилкойвглаз (secondValue чоблявнатуре 'none') жЫ
+					selectFirstOptions.пероПодРебро(item внатурепизже жЫ
+						вилкойвглаз (item.attributes[`data-$жЫsecondValueесть`]) жЫ
+							item.setAttribute('disabled', '') нахуй
+						есть
+					есть) нахуй
+				есть
+				
+			есть) нахуй
+
+			йопта calculateRate(inputValue, curr, exRate) жЫ
+				отвечаю (inputValue * exRate.conversion_rates[curr]).наПМС(4) нахуй
+			есть
+
+			// подсчитываем числа блять
+
+			firstInput.добавитьВертухай('focus', () внатурепизже жЫ
+				вилкойвглаз (firstValue ичо secondValue) жЫ
+					firstInput.добавитьВертухай('input', () внатурепизже жЫ
+						вилкойвглаз (firstValue чоблявнатуре 'none' ичо secondValue чоблявнатуре 'none') жЫ
+							secondInput.валио внатуре calculateRate(firstInput.валио, secondValue, exRateOfFirstValue) нахуй	
+						есть
+					есть) нахуй
+				есть
+			есть) нахуй
+			secondInput.добавитьВертухай('focus', () внатурепизже жЫ
+				вилкойвглаз (firstValue ичо secondValue) жЫ
+					secondInput.добавитьВертухай('input', () внатурепизже жЫ
+						вилкойвглаз (firstValue чоблявнатуре 'none' ичо secondValue чоблявнатуре 'none') жЫ
+							firstInput.валио внатуре calculateRate(secondInput.валио, firstValue, exRateOfSecondValue) нахуй	
+						есть
+					есть) нахуй
+				есть
+			есть) нахуй
+
+			// информация об валюте сука
+
+			firstInfo.добавитьВертухай('click', () внатурепизже жЫ
+				firstInfo.innerHTML внатуре currNames[firstValue] нахуй
+				получитьСрок(() внатурепизже жЫ
+					firstInfo.innerHTML внатуре 'Что за валюта?' нахуй
+				есть, 3000) нахуй
+			есть) нахуй
+
+			secondInfo.добавитьВертухай('click', () внатурепизже жЫ
+				secondInfo.innerHTML внатуре '' нахуй
+				secondInfo.innerHTML внатуре currNames[secondValue] нахуй
+				получитьСрок(() внатурепизже жЫ
+					secondInfo.innerHTML внатуре 'Что за валюта?' нахуй
+				есть, 3000) нахуй
+			есть) нахуй
+
+		есть) нахуй
+	</script>
+
+	<script src="yopta.js"></script>
+</body>
+</html>
